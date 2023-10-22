@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CustomBloon.Display
+namespace Extension.Display
 {
     internal class CustomBloonDisplay : ModDisplay
     {

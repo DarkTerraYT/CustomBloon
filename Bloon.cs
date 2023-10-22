@@ -1,9 +1,9 @@
 ﻿using BTD_Mod_Helper.Api.Bloons;
 using BTD_Mod_Helper.Extensions;
 using Il2CppAssets.Scripts.Models.Bloons;
-using static CustomBloon.CustomBloon;
+using static Extension.CustomBloon;
 
-namespace CustomBloon
+namespace Extension
 {
     internal class Bloon : ModBloon
     {

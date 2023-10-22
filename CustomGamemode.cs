@@ -3,9 +3,9 @@ using BTD_Mod_Helper.Api.Scenarios;
 using BTD_Mod_Helper.Extensions;
 using Il2CppAssets.Scripts.Models;
 using Il2CppAssets.Scripts.Models.Difficulty;
-using static CustomBloon.CustomBloon;
+using static Extension.CustomBloon;
 
-namespace CustomBloon
+namespace Extension
 {
     internal class CustomGamemode : ModGameMode
     {

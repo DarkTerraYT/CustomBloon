@@ -1,6 +1,6 @@
 ﻿using BTD_Mod_Helper.Api.Bloons;
 using BTD_Mod_Helper.Api.Enums;
-using static CustomBloon.CustomBloon;
+using static Extension.CustomBloon;
 using System.Collections.Generic;
 using Il2CppAssets.Scripts.Models.Rounds;
 using System.Linq;
@@ -10,7 +10,7 @@ using Il2CppAssets.Scripts.Unity;
 using Il2CppAssets.Scripts.Models;
 using BTD_Mod_Helper;
 
-namespace CustomBloon
+namespace Extension
 {
     internal class CustomRoundSet : ModRoundSet
     {

@@ -1,4 +1,4 @@
-namespace CustomBloon;
+namespace Extension;
 
 public static class ModHelperData
 {

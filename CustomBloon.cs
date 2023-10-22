@@ -1,6 +1,6 @@
 using MelonLoader;
 using BTD_Mod_Helper;
-using CustomBloon;
+using Extension;
 using BTD_Mod_Helper.Api.ModOptions;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,10 +12,10 @@ using BTD_Mod_Helper.Api;
 using Il2CppSystem.IO;
 using BTD_Mod_Helper.Extensions;
 
-[assembly: MelonInfo(typeof(CustomBloon.CustomBloon), ModHelperData.Name, ModHelperData.Version, ModHelperData.RepoOwner)]
+[assembly: MelonInfo(typeof(Extension.CustomBloon), ModHelperData.Name, ModHelperData.Version, ModHelperData.RepoOwner)]
 [assembly: MelonGame("Ninja Kiwi", "BloonsTD6")]
 
-namespace CustomBloon;
+namespace Extension;
 
 public class CustomBloon : BloonsTD6Mod
 {
@@ -185,6 +185,12 @@ public class CustomBloon : BloonsTD6Mod
             ModHelper.Msg<CustomBloon>("Bloon Type Reset to Red!");
 
             BaseBloonType.SetValue("Red");
+        }
+
+
+        if(!Directory.Exists(DisplayPath))
+        {
+            Directory.CreateDirectory(DisplayPath);
         }
     }
 }

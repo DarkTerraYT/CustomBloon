@@ -4,7 +4,7 @@ using Il2CppAssets.Scripts.Unity;
 using Il2CppSystem;
 using System.ComponentModel;
 
-namespace CustomBloon
+namespace Extension
 {
     // Class I Copy With Helpful Things For Modding
     internal class Ext
