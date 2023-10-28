@@ -14,5 +14,6 @@
 
     <ItemGroup>
       <None Remove="BloonI.png" />
+      <None Remove="Display\CustomBloonOriginal.png" />
     </ItemGroup>
 </Project>
