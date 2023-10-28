@@ -19,8 +19,6 @@ namespace Extension;
 
 public class CustomBloon : BloonsTD6Mod
 {
-    public static readonly string DisplayPath = @"Mods\BloonsTD6 Mod Helper\Custom Bloon";
-
     public static int AffectedRounds = 0;
 
     public static readonly ModSettingCategory BloonStats = new("Bloon Stats");
@@ -79,12 +77,6 @@ public class CustomBloon : BloonsTD6Mod
         requiresRestart = true,
         category = BloonSettings,
         description = "Use The Custom Bloon Display? If the file is null then will be the one I made"
-    };
-    public static readonly ModSettingFile CustomBloonDisplayFile = new(DisplayPath + @"\CustomBloon")
-    {
-        requiresRestart = true,
-        category = BloonSettings,
-        description = "Used with Custom Bloon Display"
     };
     public static readonly ModSettingBool TowerDisplay = new(false)
     {
@@ -185,12 +177,6 @@ public class CustomBloon : BloonsTD6Mod
             ModHelper.Msg<CustomBloon>("Bloon Type Reset to Red!");
 
             BaseBloonType.SetValue("Red");
-        }
-
-
-        if(!Directory.Exists(DisplayPath))
-        {
-            Directory.CreateDirectory(DisplayPath);
         }
     }
 }
