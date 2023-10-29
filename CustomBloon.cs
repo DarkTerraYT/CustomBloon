@@ -164,6 +164,44 @@ public class CustomBloon : BloonsTD6Mod
         category = RoundSetSettings,
         description = "Only set this to true if you want only the custom bloon to spawn"
     };
+    static readonly ModSettingCategory BloonProperties = new("BloonProperites");
+
+    public static readonly ModSettingBool Lead = new(false)
+    {
+        requiresRestart = true,
+        category = BloonProperties,
+        description = "Can't be popped by towers that can't pop leads"
+    };
+    public static readonly ModSettingBool Purple = new(false)
+    {
+        requiresRestart = true,
+        category = BloonProperties,
+        description = "Can't be popped by towers that use magic attacks"
+    };
+    public static readonly ModSettingBool Black = new(false)
+    {
+        requiresRestart = true,
+        category = BloonProperties,
+        description = "Can't be popped by towers that use explosions"
+    };
+    public static readonly ModSettingBool White = new(false)
+    {
+        requiresRestart = true,
+        category = BloonProperties,
+        description = "Can't be popped by towers that use ice attacks"
+    };
+    public static readonly ModSettingBool Frozen = new(false)
+    {
+        requiresRestart = true,
+        category = BloonProperties,
+        description = "Can't be popped by towers that can't pop frozen bloons (lead but weaker)"
+    };
+    public static readonly ModSettingBool Immune = new(false)
+    {
+        requiresRestart = true,
+        category = BloonProperties,
+        description = "Can't be popped at all"
+    };
 
     public override void OnApplicationStart()
     {
