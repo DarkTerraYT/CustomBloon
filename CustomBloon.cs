@@ -209,9 +209,9 @@ public class CustomBloon : BloonsTD6Mod
 
         bool flag = i.Contains("Gold");
 
-        if (flag | Ext.GetBloon(BaseBloonType) == null)
+        if (flag)
         {
-            ModHelper.Error<CustomBloon>("Illegal or Non-Existent Bloon Type Was Used! BloonType Attemped Was: " + BaseBloonType);
+            ModHelper.Error<CustomBloon>("Illegal BloonType Was Used! BloonType Attemped Was: " + BaseBloonType);
             ModHelper.Msg<CustomBloon>("Bloon Type Reset to Red!");
 
             BaseBloonType.SetValue("Red");
