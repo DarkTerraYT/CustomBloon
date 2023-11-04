@@ -14,6 +14,7 @@ namespace Extension
 {
     internal class CustomRoundSet : ModRoundSet
     {
+        int nextRound = FirstAppearance;
         public override string BaseRoundSet => RoundSetType.Default;
         public override int DefinedRounds => LastAppearance + 1;
         public override string Icon => "Icon";
@@ -21,18 +22,36 @@ namespace Extension
 
         public override void ModifyRoundModels(RoundModel roundModel, int round)
         {
-            if (round >= FirstAppearance)
+            if(nextRound <= round)
             {
-                if (OnlySpawnCustomBloon)
+                nextRound = round;
+            }
+
+            if (round == nextRound)
+            {
+                if (round >= FirstAppearance)
                 {
-                    roundModel.ClearBloonGroups();
+                    if (OnlySpawnCustomBloon)
+                    {
+                        roundModel.ClearBloonGroups();
+                    }
+                    roundModel.AddBloonGroup(BloonID<Bloon>(), SpawnsPerRound);
+                    AffectedRounds++;
+                    if (round >= LastAppearance)
+                    {
+                        ModHelper.Msg<CustomBloon>("Modified " + AffectedRounds + " Rounds");
+                    }
                 }
-                roundModel.AddBloonGroup(BloonID<Bloon>(), SpawnsPerRound);
-                ModHelper.Msg<CustomBloon>("Modified Round " + round);
-                AffectedRounds++;
-                if (round >= LastAppearance)
+                if (round > FirstAppearance)
                 {
-                    ModHelper.Msg<CustomBloon>("Modified " + AffectedRounds + " Rounds");
+                    if (nextRound + RoundDelay > LastAppearance)
+                    {
+                        nextRound = LastAppearance;
+                    }
+                    else
+                    {
+                        nextRound += RoundDelay;
+                    }
                 }
             }
         }

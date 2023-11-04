@@ -2,15 +2,7 @@ using MelonLoader;
 using BTD_Mod_Helper;
 using Extension;
 using BTD_Mod_Helper.Api.ModOptions;
-using System.Collections.Generic;
-using System.ComponentModel;
-using HarmonyLib;
-using Il2CppAssets.Scripts.Models.Bloons;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using Il2CppAssets.Scripts.Unity;
-using BTD_Mod_Helper.Api;
-using Il2CppSystem.IO;
-using BTD_Mod_Helper.Extensions;
+using Il2CppAssets.Scripts.Models;
 
 [assembly: MelonInfo(typeof(Extension.CustomBloon), ModHelperData.Name, ModHelperData.Version, ModHelperData.RepoOwner)]
 [assembly: MelonGame("Ninja Kiwi", "BloonsTD6")]
@@ -76,7 +68,7 @@ public class CustomBloon : BloonsTD6Mod
     {
         requiresRestart = true,
         category = BloonSettings,
-        description = "Use The Custom Bloon Display? If the file is null then will be the one I made"
+        description = "Use The Custom Bloon Display?"
     };
     public static readonly ModSettingBool TowerDisplay = new(false)
     {
@@ -88,41 +80,20 @@ public class CustomBloon : BloonsTD6Mod
     {
         requiresRestart = true,
         category = BloonSettings,
-        description = "Which Bloon Should This Look Like? Used When Use Custom Bloon Display Isn't Used. ONLY PUT IN A TOWER ID IF TOWER DISPLAY IS ENABLED!"
+        description = "Which Bloon Should This Look Like? Used When Use Custom Bloon Display Isn't Used. ONLY PUT IN A TOWER ID IF TOWER DISPLAY IS ENABLED! IDs are like this -> NinjaMonkey for the 000 abd NinjaMonkey-402 when it has upgrades. For Heros it's HeroName or HeroName Level. This could look like Geraldo or Geraldo 12. IDs for bloons is just the name like Ddt"
     };
-    public static readonly ModSettingBool Regrow = new(false)
+    public static readonly ModSettingInt CashPerPop = new(1)
     {
         requiresRestart = true,
         category = BloonSettings,
-        description = "Is This a Regrow Bloon?"
+        description = "How much cash is awarded per pop. Warning if you make this too big, you will reach the 32 bit integer (signed integer) limit\""
     };
-    public static readonly ModSettingBool Camo = new(false)
+    public static readonly ModSettingDouble CashPerPopMultiplier = new(1)
     {
         requiresRestart = true,
         category = BloonSettings,
-        description = "Is This a Camo Bloon?"
+        description = "The multiplier for how much cash you get. 0.5 is half and 2 is double. Warning if you make this too big, you will reach the 32 bit integer (signed integer) limit"
     };
-    public static readonly ModSettingBool Fortified = new(false)
-    {
-        requiresRestart = true,
-        category = BloonSettings,
-        description = "Is This Bloon Fortified?"
-    };
-    public static readonly ModSettingBool Moab = new(false)
-    {
-        requiresRestart = true,
-        category = BloonSettings,
-        description = "Is This a Moab Bloon?"
-    };
-
-    /* Might Be Added In The Future
-    public static readonly ModSettingBool Boss = new(false)
-    {
-        requiresRestart = true,
-        category = BloonSettings,
-        description = "Bloonarius, Lych, Vortex, Dreadbloon, and Phayze"
-    };
-    */
 
     public static readonly ModSettingCategory RoundSetSettings = new("Round Set Settings");
 
@@ -164,7 +135,14 @@ public class CustomBloon : BloonsTD6Mod
         category = RoundSetSettings,
         description = "Only set this to true if you want only the custom bloon to spawn"
     };
-    static readonly ModSettingCategory BloonProperties = new("BloonProperites");
+    public static readonly ModSettingInt RoundDelay = new(0)
+    {
+        requiresRestart = true,
+        category = RoundSetSettings,
+        description = "How many rounds until the round the bloon spawns",
+        min = 0
+    };
+    static readonly ModSettingCategory BloonProperties = new("Bloon Properites");
 
     public static readonly ModSettingBool Lead = new(false)
     {
@@ -201,6 +179,42 @@ public class CustomBloon : BloonsTD6Mod
         requiresRestart = true,
         category = BloonProperties,
         description = "Can't be popped at all"
+    };
+    public static readonly ModSettingBool Regrow = new(false)
+    {
+        requiresRestart = true,
+        category = BloonProperties,
+        description = "Is This a Regrow Bloon?"
+    };
+    public static readonly ModSettingDouble RegrowRate = new(1)
+    {
+        requiresRestart = true,
+        category = BloonProperties,
+        description = "How many layers regrow per second"
+    };
+    public static readonly ModSettingBool Camo = new(false)
+    {
+        requiresRestart = true,
+        category = BloonProperties,
+        description = "Is This a Camo Bloon?"
+    };
+    public static readonly ModSettingBool Fortified = new(false)
+    {
+        requiresRestart = true,
+        category = BloonProperties,
+        description = "Is This Bloon Fortified?"
+    };
+    public static readonly ModSettingBool Moab = new(false)
+    {
+        requiresRestart = true,
+        category = BloonProperties,
+        description = "Is This a Moab Bloon?"
+    };
+    public static readonly ModSettingBool Boss = new(false)
+    {
+        requiresRestart = true,
+        category = BloonProperties,
+        description = "Makes the bloon a boss bloon. "
     };
 
     public override void OnApplicationStart()

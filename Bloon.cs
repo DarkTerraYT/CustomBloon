@@ -3,12 +3,21 @@ using BTD_Mod_Helper.Extensions;
 using Il2CppAssets.Scripts.Models.Bloons;
 using Il2Cpp;
 using static Extension.CustomBloon;
+using System.Collections.Generic;
+using Il2CppAssets.Scripts.Models.Bloons.Behaviors;
 
 namespace Extension
 {
     internal class Bloon : ModBloon
     {
+        public override bool Camo => CustomBloon.Camo;
+        public override bool Fortified => CustomBloon.Fortified;
+        public override bool Regrow => CustomBloon.Regrow;
+        public override float RegrowRate => CustomBloon.RegrowRate;
+
         public override string BaseBloon => BaseBloonType;
+
+        public override IEnumerable<string> DamageStates => new string[] { };
 
         public override string Icon => "BloonI";
 
@@ -27,6 +36,8 @@ namespace Extension
                 bloonModel.leakDamage = LeakDamage;
             }
 
+            bloonModel.GetBehavior<DistributeCashModel>().cash = CashPerPop;
+
             if (CustomBloonDisplay)
             {
                 bloonModel.ApplyDisplay<Display.CustomBloonDisplay>();
@@ -36,29 +47,16 @@ namespace Extension
                 if (!TowerDisplay) { bloonModel.SetDisplayGUID(Ext.GetDisplay(DisplayFromWhat, 0)); }
                 else { bloonModel.SetDisplayGUID(Ext.GetDisplay(DisplayFromWhat, 1)); }
             }
-
-            if (Regrow)
-            {
-                bloonModel.isGrow = true;
-                bloonModel.IsRegrowBloon();
-                bloonModel.MakeChildrenRegrow();
-            }
-            if (Fortified)
-            {
-                bloonModel.isFortified = true;
-                bloonModel.IsFortifiedBloon();
-                bloonModel.MakeChildrenFortified();
-            }
-            if (Camo)
-            {
-                bloonModel.isCamo = true;
-                bloonModel.IsCamoBloon();
-                bloonModel.MakeChildrenCamo();
-            }
             if (Moab)
             {
+                bloonModel.AddTag("Moab");
                 bloonModel.isMoab = true;
                 bloonModel.IsMoabBloon();
+            }
+            if (Boss)
+            {
+                bloonModel.AddTag("Boss");
+                bloonModel.isBoss = true;
             }
             if (Immune)
             {
