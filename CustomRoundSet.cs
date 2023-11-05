@@ -18,7 +18,7 @@ namespace Extension
         public override string BaseRoundSet => RoundSetType.Default;
         public override int DefinedRounds => LastAppearance + 1;
         public override string Icon => "Icon";
-        public override string DisplayName => "Custom Bloon";
+        public override string DisplayName => RoundSetName;
 
         public override void ModifyRoundModels(RoundModel roundModel, int round)
         {

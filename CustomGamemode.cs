@@ -14,7 +14,7 @@ namespace Extension
         public override string BaseGameMode =>GameModeType.None;
 
         public override string Icon => "Icon";
-        public override string DisplayName => "Custom Bloon";
+        public override string DisplayName => GameModeName;
 
         public override void ModifyBaseGameModeModel(ModModel gameModeModel)
         {

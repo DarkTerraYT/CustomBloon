@@ -2,7 +2,12 @@ using MelonLoader;
 using BTD_Mod_Helper;
 using Extension;
 using BTD_Mod_Helper.Api.ModOptions;
-using Il2CppAssets.Scripts.Models;
+using Il2CppAssets.Scripts.Models.Bloons;
+using Il2CppAssets.Scripts.Unity;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using HarmonyLib;
+using Il2CppSystem.Collections.Generic;
+using BTD_Mod_Helper.Api;
 
 [assembly: MelonInfo(typeof(Extension.CustomBloon), ModHelperData.Name, ModHelperData.Version, ModHelperData.RepoOwner)]
 [assembly: MelonGame("Ninja Kiwi", "BloonsTD6")]
@@ -35,7 +40,8 @@ public class CustomBloon : BloonsTD6Mod
     public static readonly ModSettingDouble Speed = new(1)
     {
         requiresRestart = true,
-        category = BloonStats
+        category = BloonStats,
+        description = "The speed of a red bloon is 25"
     };
     public static readonly ModSettingBool SetLeakDamage = new(true)
     {
@@ -57,12 +63,6 @@ public class CustomBloon : BloonsTD6Mod
         requiresRestart = true,
         category = BloonSettings,
         description = "What the default bloon is"
-    };
-    public static readonly ModSettingBool KeepChildren = new(false)
-    {
-        requiresRestart = true,
-        category = BloonSettings,
-        description = "Does The Bloon Keep it's Children? (Yellow's is 1 Green, Moab's is 4 Ceramics)"
     };
     public static readonly ModSettingBool CustomBloonDisplay = new(true)
     {
@@ -86,13 +86,14 @@ public class CustomBloon : BloonsTD6Mod
     {
         requiresRestart = true,
         category = BloonSettings,
-        description = "How much cash is awarded per pop. Warning if you make this too big, you will reach the 32 bit integer (signed integer) limit\""
+        description = "How much cash is awarded per pop. Warning if you make this too big, you will reach the 32 bit integer (signed integer) limit"
     };
     public static readonly ModSettingDouble CashPerPopMultiplier = new(1)
     {
         requiresRestart = true,
         category = BloonSettings,
-        description = "The multiplier for how much cash you get. 0.5 is half and 2 is double. Warning if you make this too big, you will reach the 32 bit integer (signed integer) limit"
+        description = "The multiplier for how much cash you get. 0.5 is half and 2 is double. Warning if you make this too big, you will reach the 32 bit integer (signed integer) limit",
+        min = 0
     };
 
     public static readonly ModSettingCategory RoundSetSettings = new("Round Set Settings");
@@ -142,6 +143,19 @@ public class CustomBloon : BloonsTD6Mod
         description = "How many rounds until the round the bloon spawns",
         min = 0
     };
+    public static readonly ModSettingString RoundSetName = new("Custom Bloon")
+    {
+        requiresRestart = true,
+        category = RoundSetSettings,
+        description = "Custom Bloon Round Set Name"
+    };
+    public static readonly ModSettingString GameModeName = new("Custom Bloon")
+    {
+        requiresRestart = true,
+        category = RoundSetSettings,
+        description = "Custom Bloon Game Mode Name"
+    };
+
     static readonly ModSettingCategory BloonProperties = new("Bloon Properites");
 
     public static readonly ModSettingBool Lead = new(false)
@@ -217,11 +231,95 @@ public class CustomBloon : BloonsTD6Mod
         description = "Makes the bloon a boss bloon. "
     };
 
+    public static readonly ModSettingCategory Children = new("Bloon's Children");
+
+    public static readonly ModSettingBool KeepOriginalChildren = new(false)
+    {
+        requiresRestart = true,
+        category = Children,
+        description = "Does The Bloon Keep it's original Children? (Yellow's is 1 Green, Moab's is 4 Ceramics)"
+    };
+    public static readonly ModSettingString Child1Id = new("Red")
+    {
+        requiresRestart = true,
+        category = Children,
+        description = "What bloon this child is"
+    };
+    public static readonly ModSettingInt Child1Amount = new(0)
+    {
+        requiresRestart = true,
+        category = Children,
+        description = "How many children spawn of this bloon type",
+        min = 0
+    };
+    public static readonly ModSettingString Child2Id = new("Blue")
+    {
+        requiresRestart = true,
+        category = Children,
+        description = "What bloon this child is"
+    };
+    public static readonly ModSettingInt Child2Amount = new(0)
+    {
+        requiresRestart = true,
+        category = Children,
+        description = "How many children spawn of this bloon type",
+        min = 0
+    };
+    public static readonly ModSettingString Child3Id = new("Green")
+    {
+        requiresRestart = true,
+        category = Children,
+        description = "What bloon this child is"
+    };
+    public static readonly ModSettingInt Child3Amount = new(0)
+    {
+        requiresRestart = true,
+        category = Children,
+        description = "How many children spawn of this bloon type",
+        min = 0
+    };
+    public static readonly ModSettingString Child4Id = new("Yellow")
+    {
+        requiresRestart = true,
+        category = Children,
+        description = "What bloon this child is"
+    };
+    public static readonly ModSettingInt Child4Amount = new(0)
+    {
+        requiresRestart = true,
+        category = Children,
+        description = "How many children spawn of this bloon type",
+        min = 0
+    };
+    public static readonly ModSettingString Child5Id = new("Pink")
+    {
+        requiresRestart = true,
+        category = Children,
+        description = "What bloon this child is"
+    };
+    public static readonly ModSettingInt Child5Amount = new(0)
+    {
+        requiresRestart = true,
+        category = Children,
+        description = "How many children spawn of this bloon type",
+        min = 0
+    };
+
     public override void OnApplicationStart()
     {
         string i = BaseBloonType;
+        string ii = Child1Id;
+        string iii = Child2Id;
+        string iiii = Child3Id;
+        string iiiii = Child4Id;
+        string iiiiii = Child5Id;
 
         bool flag = i.Contains("Gold");
+        bool flag2 = ii.Contains("Gold");
+        bool flag3 = iii.Contains("Gold");
+        bool flag4 = iiii.Contains("Gold");
+        bool flag5 = iiiii.Contains("Gold");
+        bool flag6 = iiiiii.Contains("Gold");
 
         if (flag)
         {
@@ -229,6 +327,45 @@ public class CustomBloon : BloonsTD6Mod
             ModHelper.Msg<CustomBloon>("Bloon Type Reset to Red!");
 
             BaseBloonType.SetValue("Red");
+        }
+        if (flag2)
+        {
+            ModHelper.Error<CustomBloon>("Illegal BloonType For a Child Was Used! BloonType Attemped Was: " + Child1Id);
+            ModHelper.Msg<CustomBloon>("Bloon Type Reset to Red!");
+        }
+        if (flag3)
+        {
+            ModHelper.Error<CustomBloon>("Illegal BloonType For a Child Was Used! BloonType Attemped Was: " + Child2Id);
+            ModHelper.Msg<CustomBloon>("Bloon Type Reset to Red!");
+        }
+        if (flag4)
+        {
+            ModHelper.Error<CustomBloon>("Illegal BloonType For a Child Was Used! BloonType Attemped Was: " + Child3Id);
+            ModHelper.Msg<CustomBloon>("Bloon Type Reset to Red!");
+        }
+        if (flag5)
+        {
+            ModHelper.Error<CustomBloon>("Illegal BloonType For a Child Was Used! BloonType Attemped Was: " + Child4Id);
+            ModHelper.Msg<CustomBloon>("Bloon Type Reset to Red!");
+        }
+        if (flag6)
+        {
+            ModHelper.Error<CustomBloon>("Illegal BloonType For a Child Was Used! BloonType Attemped Was: " + Child5Id);
+            ModHelper.Msg<CustomBloon>("Bloon Type Reset to Red!");
+        }
+    }
+    [HarmonyPatch(typeof(Il2CppAssets.Scripts.Unity.UI_New.InGame.BloonMenu.BloonMenu), "CreateBloonButtons")]
+    public class MapLoader_Patch
+    {
+        [HarmonyPrefix]
+        public static bool Prefix(List<BloonModel> sortedBloons)
+        {
+            foreach (BloonModel bloon in (Il2CppArrayBase<BloonModel>)Game.instance.model.bloons)
+            {
+                if (bloon.baseId == ModContent.BloonID<Bloon>())
+                    sortedBloons.Add(bloon);
+            }
+            return true;
         }
     }
 }

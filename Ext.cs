@@ -18,7 +18,7 @@ namespace Extension
             }
             if (type == 1)
             {
-                return Game.instance.model.GetTower(id).display.GUID;
+                return Game.instance.model.GetTowerFromId(id).display.GUID;
             }
             else
             {

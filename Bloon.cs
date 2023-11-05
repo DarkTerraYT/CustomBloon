@@ -3,8 +3,11 @@ using BTD_Mod_Helper.Extensions;
 using Il2CppAssets.Scripts.Models.Bloons;
 using Il2Cpp;
 using static Extension.CustomBloon;
-using System.Collections.Generic;
 using Il2CppAssets.Scripts.Models.Bloons.Behaviors;
+using Il2CppSystem.Collections.Generic;
+using static Il2CppFacepunch.Steamworks.Inventory;
+using System;
+using Il2CppAssets.Scripts;
 
 namespace Extension
 {
@@ -17,7 +20,7 @@ namespace Extension
 
         public override string BaseBloon => BaseBloonType;
 
-        public override IEnumerable<string> DamageStates => new string[] { };
+        public override System.Collections.Generic.IEnumerable<string> DamageStates => new string[] { };
 
         public override string Icon => "BloonI";
 
@@ -37,6 +40,7 @@ namespace Extension
             }
 
             bloonModel.GetBehavior<DistributeCashModel>().cash = CashPerPop;
+            bloonModel.GetBehavior<DistributeCashModel>().multiplier = CashPerPopMultiplier;
 
             if (CustomBloonDisplay)
             {
@@ -183,11 +187,16 @@ namespace Extension
                 bloonModel.bloonProperties = BloonProperties.Frozen;
             }
 
-            // KEEP LAST
-            if (!KeepChildren)
+            if (!KeepOriginalChildren)
             {
                 bloonModel.RemoveAllChildren();
             }
+
+            bloonModel.AddToChildren(Ext.GetBloon(Child1Id).id, Child1Amount);
+            bloonModel.AddToChildren(Ext.GetBloon(Child2Id).id, Child2Amount);
+            bloonModel.AddToChildren(Ext.GetBloon(Child3Id).id, Child3Amount);
+            bloonModel.AddToChildren(Ext.GetBloon(Child4Id).id, Child4Amount);
+            bloonModel.AddToChildren(Ext.GetBloon(Child5Id).id, Child5Amount);
         }
     }
 }
