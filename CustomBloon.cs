@@ -143,6 +143,20 @@ public class CustomBloon : BloonsTD6Mod
         description = "How many rounds until the round the bloon spawns",
         min = 0
     };
+    public static readonly ModSettingInt StartFrame = new(0)
+    {
+        requiresRestart = true,
+        category = RoundSetSettings,
+        description = "What the first frame that the bloon spawns in (60 frames = 1 second)",
+        min = 0
+    };
+    public static readonly ModSettingInt EndFrame = new(60)
+    {
+        requiresRestart = true,
+        category = RoundSetSettings,
+        description = "The Last Frame the bloon will spawn in (60 frames = 1 second)",
+        min = 0
+    };
     public static readonly ModSettingString RoundSetName = new("Custom Bloon")
     {
         requiresRestart = true,

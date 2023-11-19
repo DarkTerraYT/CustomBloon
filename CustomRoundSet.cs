@@ -35,7 +35,7 @@ namespace Extension
                     {
                         roundModel.ClearBloonGroups();
                     }
-                    roundModel.AddBloonGroup(BloonID<Bloon>(), SpawnsPerRound);
+                    roundModel.AddBloonGroup(BloonID<Bloon>(), SpawnsPerRound, StartFrame, EndFrame);
                     AffectedRounds++;
                     if (round >= LastAppearance)
                     {
