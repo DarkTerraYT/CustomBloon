@@ -1,10 +1,7 @@
 ﻿using BTD_Mod_Helper.Api.Display;
+using Il2CppAssets.Scripts.Unity;
 using Il2CppAssets.Scripts.Unity.Display;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static Extension.CustomBloon;
 
 namespace Extension.Display
 {
@@ -16,6 +13,23 @@ namespace Extension.Display
         public override void ModifyDisplayNode(UnityDisplayNode node)
         {
                 Set2DTexture(node, "CustomBloon");
+        }
+    }
+
+    internal class BloonDisplay : ModDisplay
+    {
+        public override string BaseDisplay => GetDaDisplay();
+
+        string GetDaDisplay()
+        {
+            if (TowerDisplay)
+            {
+                return Game.instance.model.GetTowerFromId(DisplayFromWhat).display.GUID;
+            }
+            else
+            {
+                return GetBloonDisplay(DisplayFromWhat);
+            }
         }
     }
 }

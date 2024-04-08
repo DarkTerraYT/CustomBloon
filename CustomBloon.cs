@@ -8,6 +8,10 @@ using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using HarmonyLib;
 using Il2CppSystem.Collections.Generic;
 using BTD_Mod_Helper.Api;
+using UnityEngine;
+using System.IO;
+using System;
+using Il2CppAssets.Scripts.Unity.UI_New.Popups;
 
 [assembly: MelonInfo(typeof(Extension.CustomBloon), ModHelperData.Name, ModHelperData.Version, ModHelperData.RepoOwner)]
 [assembly: MelonGame("Ninja Kiwi", "BloonsTD6")]
@@ -17,6 +21,178 @@ namespace Extension;
 public class CustomBloon : BloonsTD6Mod
 {
     public static int AffectedRounds = 0;
+
+    static bool CreatedExportedDataFolder = false;
+
+    static string ConfigFile = Path.Combine(ModHelper.ModHelperDirectory, "Mod Settings", "CustomBloon.json");
+
+    public override void OnApplicationStart()
+    {
+        CreatedExportedDataFolder = false;
+
+        if (!Directory.Exists(DataPath))
+        {
+            Directory.CreateDirectory(DataPath);
+        }
+        if (!Directory.Exists(ExportedDataPath))
+        {
+            Directory.CreateDirectory(ExportedDataPath);
+            CreatedExportedDataFolder = true;
+        }
+    }
+
+    public override void OnMainMenu()
+    {
+        if (PopupScreen.instance != null)
+        {
+            if (CreatedExportedDataFolder)
+            {
+                PopupScreen.instance.ShowOkPopup("Created Exported Data Path!");
+                CreatedExportedDataFolder = false;
+            }
+        }
+    }
+
+    private static void ExportData()
+    {
+        if (!Directory.Exists(DataPath))
+        {
+            Directory.CreateDirectory(DataPath);
+        }
+
+        if (!Directory.Exists(ExportedDataPath))
+        {
+            Directory.CreateDirectory(ExportedDataPath);
+        }
+        if (Directory.Exists(ExportedDataPath))
+        {
+            string ExportFile;
+
+            if (IncludeExportTime)
+            {
+                ExportFile = Path.Combine(ExportedDataPath, ExportName + "_" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + " " + DateTime.Now.Hour + "_" + DateTime.Now.Minute + "_" + DateTime.Now.Second + ".json");
+            }
+            else
+            {
+                ExportFile = Path.Combine(ExportedDataPath, ExportName + ".json");
+            }
+
+            File.Copy(ConfigFile, ExportFile, true);
+
+            if (PopupScreen.instance != null)
+            {
+                PopupScreen.instance.ShowOkPopup("Exported settings to " + ExportFile);
+            }
+        }
+        ModHelper.Log<CustomBloon>(ExportedDataPath);
+    }
+
+    private static void ImportData()
+    {
+        if (!Directory.Exists(DataPath))
+        {
+            Directory.CreateDirectory(DataPath);
+        }
+
+        if (!Directory.Exists(ExportedDataPath))
+        {
+            Directory.CreateDirectory(ExportedDataPath);
+        }
+        if (Directory.Exists(ExportedDataPath))
+        {
+            string ImportFile = Path.Combine(ExportedDataPath, ImportName + ".json");
+
+            try
+            {
+                File.Copy(ImportFile, ConfigFile, true);
+            }
+            catch (Exception exception)
+            {
+                ModHelper.Error<CustomBloon>("File " + ImportFile + " Doesn't Exist!");
+                ModHelper.Error<CustomBloon>("Stacktrace: " + exception.StackTrace);
+
+                if (PopupScreen.instance != null)
+                {
+                    PopupScreen.instance.ShowOkPopup("Failed to import settings. Check console for more info.");
+                }
+            }
+
+            if (!File.Exists(ImportFile))
+            {
+                ModHelper.Error<CustomBloon>("File " + ImportFile + " Doesn't Exist!");
+
+                if (PopupScreen.instance != null)
+                {
+                    PopupScreen.instance.ShowOkPopup("Failed to import settings. Check console for more info.");
+                }
+
+                return;
+            }
+            else
+            {
+
+            }
+
+            if (PopupScreen.instance != null)
+            {
+                Action<string> quit = restart => Application.Quit(-1);
+                Action<string> idk = action => PopupScreen.instance.ShowSetNamePopup("Imported Settings!",
+                    "For changes to take place, you'll need to restart the game. Press OK to close BTD6", quit, "OK");
+
+                PopupScreen.instance.ShowSetNamePopup("Import Settings?",
+                    "Doing this will replace your current settings.", idk, "Import");
+            }
+        }
+        ModHelper.Log<CustomBloon>(ExportedDataPath);
+    }
+
+    public override void OnUpdate()
+    {
+        if (ExportSettings.JustPressed())
+        {
+            ExportData();
+        }
+        if (ImportSettings.JustPressed())
+        {
+            ImportData();
+        }
+    }
+
+    public static string DataPath = Path.Combine(ModHelper.ModHelperDirectory, "Customizable Mods", "CustomBloon", "Data");
+    public static string ExportedDataPath = Path.Combine(DataPath, "Exported Data");
+
+
+    internal static readonly ModSettingCategory ExportnImport = new("Exporting and Importing");
+
+    internal static readonly ModSettingHotkey ExportSettings = new(KeyCode.Keypad1)
+    {
+        category = ExportnImport
+    };
+
+    internal static readonly ModSettingHotkey ImportSettings = new(KeyCode.Keypad0)
+    {
+        category = ExportnImport,
+    };
+
+    internal static readonly ModSettingString ExportName = new("CustomBloon")
+    {
+        displayName = "Export Name (No Spaces!)",
+        category = ExportnImport,
+        description = "What to call the exported settings file (without .json) NO SPACES!!"
+    };
+
+    internal static readonly ModSettingString ImportName = new("CustomBloon")
+    {
+        category = ExportnImport,
+        description = "Which file to import (without .json)"
+    };
+
+    internal static readonly ModSettingBool IncludeExportTime = new(false)
+    {
+        category = ExportnImport,
+        description = "Wether or not the include the time of the export in the name. This does make it so that the name is longer."
+    };
+
 
     public static readonly ModSettingCategory BloonStats = new("Bloon Stats");
 

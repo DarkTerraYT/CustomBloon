@@ -48,14 +48,12 @@ namespace Extension
             }
             else
             {
-                if (!TowerDisplay) { bloonModel.SetDisplayGUID(Ext.GetDisplay(DisplayFromWhat, 0)); }
-                else { bloonModel.SetDisplayGUID(Ext.GetDisplay(DisplayFromWhat, 1)); }
+                bloonModel.ApplyDisplay<Display.BloonDisplay>();
             }
             if (Moab)
             {
                 bloonModel.AddTag("Moab");
                 bloonModel.isMoab = true;
-                bloonModel.IsMoabBloon();
             }
             if (Boss)
             {
