@@ -26,21 +26,6 @@ public class CustomBloon : BloonsTD6Mod
 
     static string ConfigFile = Path.Combine(ModHelper.ModHelperDirectory, "Mod Settings", "CustomBloon.json");
 
-    public override void OnApplicationStart()
-    {
-        CreatedExportedDataFolder = false;
-
-        if (!Directory.Exists(DataPath))
-        {
-            Directory.CreateDirectory(DataPath);
-        }
-        if (!Directory.Exists(ExportedDataPath))
-        {
-            Directory.CreateDirectory(ExportedDataPath);
-            CreatedExportedDataFolder = true;
-        }
-    }
-
     public override void OnMainMenu()
     {
         if (PopupScreen.instance != null)
@@ -510,6 +495,18 @@ public class CustomBloon : BloonsTD6Mod
         bool flag4 = iiii.Contains("Gold");
         bool flag5 = iiiii.Contains("Gold");
         bool flag6 = iiiiii.Contains("Gold");
+
+        CreatedExportedDataFolder = false;
+
+        if (!Directory.Exists(DataPath))
+        {
+            Directory.CreateDirectory(DataPath);
+        }
+        if (!Directory.Exists(ExportedDataPath))
+        {
+            Directory.CreateDirectory(ExportedDataPath);
+            CreatedExportedDataFolder = true;
+        }
 
         if (flag)
         {
